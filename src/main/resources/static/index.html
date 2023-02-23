@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<script type="text/javascript">
+    const client_id="042e86fa-7a60-46a9-afad-9bd124ee8724";
+
+    function moveUrl(){
+        let url = "http://127.0.0.1:4444/oauth2/auth?client_id="+client_id+"&response_type=code&scope=offline+openid&state=9999999999&redirect_uri=http://localhost:8081/token/code";
+        location.replace(url);
+    }
+    function logout() {
+        let id_token = document.getElementById("id_token").value;
+        location.replace("http://127.0.0.1:4444/oauth2/sessions/logout?id_token_hint=" + id_token + "&post_logout_redirect_uri=http://localhost:8081/token/logout");
+
+    }
+
+</script>
+<head>
+    <meta charset="UTF-8">
+    <title>로그인 요청</title>
+</head>
+<body>
+<h1>테스트 1 서버</h1>
+    로그인 <br>
+    <a href="#" onclick="moveUrl();">여기를 누르면 로그인 페이지로 넘어갑니다.</a>
+    <br>
+    <br>
+    <div>
+        로그아웃 <br>
+        id_token : <input type="text" id="id_token" name="id_token"/>
+        <a href="#" onclick="logout();">로그아웃 하려면 id_token 입력 후 클릭</a>
+    </div>
+    <br>
+    <br>
+    <div>
+        <form action="/token/refresh" method="get">
+            토큰 재발급 <br>
+            refresh_token : <input type="text" name="token">
+            <input type="submit" name="submit" value="재발급">
+            <p>토큰 재발급은 refresh_token 입력 후 클릭</p>
+        </form>
+    </div>
+</body>
+</html>
