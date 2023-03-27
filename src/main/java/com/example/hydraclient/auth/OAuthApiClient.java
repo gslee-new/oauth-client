@@ -1,5 +1,12 @@
 package com.example.hydraclient.auth;
 
+import com.auth0.jwk.Jwk;
+import com.auth0.jwk.JwkException;
+import com.auth0.jwk.UrlJwkProvider;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +18,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.security.interfaces.RSAPublicKey;
 import java.util.Base64;
+import java.util.Calendar;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -71,5 +80,27 @@ public class OAuthApiClient {
                 .retrieve()
                 .bodyToMono(CodeExchangeResponse.class)
                 .block();
+    }
+
+    public void verify(String token) throws JwkException {
+        DecodedJWT jwt = JWT.decode(token);
+
+        UrlJwkProvider provider = new UrlJwkProvider(publicPath);
+
+        Jwk jwk = provider.get(jwt.getKeyId());
+        Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) jwk.getPublicKey(), null);
+        algorithm.verify(jwt);
+
+        if (jwt.getExpiresAt().before(Calendar.getInstance().getTime())) {
+            throw new RuntimeException("Expired token!!");
+        }
+    }
+
+    public Map<String, Claim> getClaims(String token) {
+        DecodedJWT jwt = JWT.decode(token);
+        Map<String, Claim> claims = jwt.getClaims();
+
+        return claims;
+
     }
 }

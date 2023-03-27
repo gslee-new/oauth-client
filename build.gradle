@@ -22,11 +22,18 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'sh.ory.hydra:hydra-client:2.0.2'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+    implementation 'javax.xml.bind:jaxb-api:2.3.0'
+    implementation 'com.auth0:java-jwt:3.19.4'
+    implementation 'com.auth0:jwks-rsa:0.22.0'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
 tasks.named('test') {
